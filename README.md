@@ -13,7 +13,7 @@ Simple App example to demonstrate proof of concept:
 		this.thead = 'thead';
 	    this.tbody = 'tbody';
 		this.getData = function(fn) {     
-            setTimeout( function(){ storage.data = data; fn(); UI.redraw(); console.log('ffff');  }, 2000);
+            setTimeout( function(){ storage.data = data; fn(); UI.redraw(); }, 2000);
 		}
 		return this;
 	};
