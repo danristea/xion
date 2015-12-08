@@ -18,15 +18,10 @@ Simple App example to demonstrate proof of concept:
 	table.view = function(ctrl) {
 	    var tbody = function() {
 	        if (typeof storage.data === 'string') return ['tr', ['td', storage.data]];
-	        else return ['tr', storage.data.map(function(val) {
-	            return ['td', val];
-	        })]
-	    }
+	        else return ['tr', storage.data.map(function(val) { return ['td', val]; })];
+	    };
 	    return [
-	        ['thead', ['tr', ['th', 'Priority 1'],
-	            ['th', 'Priority 2'],
-	            ['th', 'Priority 3']
-	        ]],
+	        ['thead', ['tr', ['th', 'Priority 1'], ['th', 'Priority 2'], ['th', 'Priority 3']]],
 	        ['tbody', tbody()]
 	    ];
 	};
