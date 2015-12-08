@@ -3,8 +3,7 @@ Lightweight client-side MVC framework that uses JsonML syntax and virtual DOM di
 
 Simple App example to demonstrate proof of concept:
 
-
-var data = ['project A','project B','project C'];
+	var data = ['project A','project B','project C'];
 var storage = {
     data: 'empty'
 }
