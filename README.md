@@ -45,7 +45,7 @@ Simple App example to demonstrate proof of concept:
 	        _this.table.getData(function() {
 	            _this.status = 'loaded';
 	            _this.loadedAt = new Date().toString();
-	            UI.redraw();
+	            UI.redraw(); // force redraw for async returns
 	        });
 	    };
 	    return this;
