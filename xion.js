@@ -25,7 +25,7 @@
 
     function build(element, data, cache) {
         var node, id, className, tmp;
-		var i = 0, tmpData = [], diffData = [], children = [];
+	var i = 0, tmpData = [], diffData = [], children = [];
 
         cache.children = cache.children || [];
 
@@ -46,7 +46,7 @@
 
         for (var l = data.length; i < l; i++) {
 		
-			// flatten non-element array one level
+	    // flatten non-element array one level
             if (Array.isArray(data[i]) && Array.isArray(data[i][0])) {
                 var frag = data.splice(i, 1)[0];
                 for (var index = frag.length; index--;) data.splice(i, 0, frag[index]);
@@ -83,7 +83,11 @@
                         cache.attrs = cache.attrs || {};
                         if (attributes[key] !== cache.attrs[key]) {
                             if (key == 'class' || key == 'className') node.className = attributes[key];
-                            else node[key] = attributes[key];
+			    else if (key == 'style') {
+				forEach(Object.keys(attributes[key]), function(attr) {
+				    node.style[attr] = attributes[key][attr];
+				})
+			    } else node[key] = attributes[key];
                             cache.attrs[key] = attributes[key];
                         };
                     };
@@ -117,7 +121,7 @@
                 if (node && !cache.children[index].node) {
                     var n = document.createElement(child[0].match(/^\w+/)[0]);
                     cache.children[index] = { "node": n };
-                    cache.node.insertBefore(n, cache.node.childNodes[index]);
+		    cache.node.insertBefore(n, cache.node.childNodes[index] ? cache.node.childNodes[index] : null);
                 };
                 build(cache.node || element, child, cache.children[index], index);
             } else if (typeof child === 'string') {
@@ -127,8 +131,8 @@
                     var n = document.createTextNode(child);
                     cache.children[index] = { "node": n };
 
-                    if (node && node.tagName) cache.node.insertBefore(n, cache.node.childNodes[index]);
-                    else element.insertBefore(n, cache.node.childNodes[index]);
+		    if (node && node.tagName) cache.node.insertBefore(n, cache.node.childNodes[index] ? cache.node.childNodes[index] : null);
+                    else element.insertBefore(n, cache.node.childNodes[index] ? cache.node.childNodes[index] : null);
                 };
             };
         });
