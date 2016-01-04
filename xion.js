@@ -36,11 +36,11 @@
             if (tmp = data[0].match(/#([\w\-]+)/)) {
                 id = tmp[1];
                 if (id && id !== node.id) node.id = id;
-            };
+            } else if (node.id) node.removeAttribute('id');
             if (tmp = data[0].match(/\.[\w\-]+/g)) {
                 className = tmp.join(' ').replace(/\./g, '');
                 if (className && className !== node.className) node.className = className;
-            };
+            } else if (node.className) node.removeAttribute('className');
             i = 1;
         };
 
