@@ -24,7 +24,6 @@
     // @param {Object} cache - Object tree used to keep state in order to minimize inserts/removes
 
     function build(element, data, cache) {
-
         var diffData = [], children = [];
 
         cache.children = cache.children || [];
@@ -71,7 +70,6 @@
                     };
                 };
             });
-
         };
 
         for (var i = 0, l = data.length; i < l; i++) {
@@ -84,7 +82,7 @@
                 continue;
             };
         };
-
+        
         diffData = data.slice(0);
 
         // loop through cached children and remove entries that do not exist in data
