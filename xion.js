@@ -51,7 +51,6 @@
                         fn.apply(this, arguments);
                         UI.redraw();
                     };
-                    console.log(cache);
                     cache.attrs[key] = cache.attrs[key] || Function;
                     if (cache.attrs[key].toString() !== fn.toString()) {
                         cache.attrs[key] = fn;
