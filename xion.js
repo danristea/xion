@@ -57,7 +57,6 @@
                         cache.node[key] = evt;
                     };
                 } else {
-                    cache.attrs = cache.attrs || {};
                     if (attributes[key] !== cache.attrs[key]) {
                         if (key == 'class' || key == 'className') cache.node.className = attributes[key];
                         else if (key == 'style') {
