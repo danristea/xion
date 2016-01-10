@@ -106,13 +106,13 @@
             cache.children[index] = cache.children[index] || {};
             if (Array.isArray(child)) {
                 if (cache.node && !cache.children[index].node) {
-                    cache.children[index] = { "node": document.createElement(child[0]) };
+                    cache.children[index] = {"node": document.createElement(child[0])};
                     cache.node.insertBefore(cache.children[index].node, cache.node.childNodes[index] ? cache.node.childNodes[index] : null);
                 };
                 build(cache.node || element, child, cache.children[index]);
             } else if (typeof child === 'string') {
                 if (!cache.children[index].node || cache.children[index].node.nodeValue !== child) {
-                    cache.children[index] = { "node": document.createTextNode(child) };
+                    cache.children[index] = {"node": document.createTextNode(child)};
                     if (cache.node && cache.node.tagName) cache.node.insertBefore(cache.children[index].node, cache.node.childNodes[index] ? cache.node.childNodes[index] : null);
                     else element.insertBefore(cache.children[index].node, cache.node.childNodes[index] ? cache.node.childNodes[index] : null);
                 };
