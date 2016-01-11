@@ -38,7 +38,7 @@
                 forEach(Object.keys(cache.attrs), function(key) {
                     if (!attributes[key]) {
                         if (key == 'class' && cache.node.getAttribute('className')) cache.node.removeAttribute('className');
-						else cache.node.removeAttribute(key);
+			else cache.node.removeAttribute(key);
                         cache.attrs[key] = null;
                         delete cache.attrs[key];
                     };
