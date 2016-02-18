@@ -55,7 +55,7 @@ Simple App example to demonstrate proof of concept:
 	        ['h1', 'Main App'],
 	        ['div', 'Started At : ', ctrl.date],
 	        ['hr'],
-	        ['div', ['button', 'Load', { "onclick": ctrl.load }],
+	        ['div', ['button', { "onclick": ctrl.load }, 'Load'],
 	            ['div', 'Status : ', ctrl.status],
 	            ['div', 'Last loaded : ', ctrl.loadedAt],
 	            ['button', { "onclick": ctrl.swap }, 'Swap'],
