@@ -1,0 +1,43 @@
+.xion_tabs {
+
+}
+.xion_tabs .xion_tabs-control {
+    padding: 10px 0 0 0;
+    border-bottom: 1px solid #ccc;
+}
+.xion_tabs .xion_tabs-control .xion_tabs-control-item {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    padding: 8px 20px;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    border-radius: 3px 3px 0 0;
+    background: #f2f2f2;
+}
+.xion_tabs-control-item-line {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    top: 100%;
+    left: 0;
+    background: #fff;
+}
+.xion_tabs .xion_tabs-control .xion_tabs-control-item.selected {
+    background: #fff;
+}
+.xion_tabs .xion_tabs-control .xion_tabs-control-item.selected .xion_tabs-control-item-line {
+    display: block;
+}
+.xion_tabs .xion_tabs-content {
+    width: 800px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+.xion_tabs .xion_tabs-content .xion_tabs-content-item {
+
+}
+.xion_tabs .xion_tabs-content .xion_tabs-content-item.hide {
+    display: none;
+}

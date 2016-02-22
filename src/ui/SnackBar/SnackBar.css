@@ -1,0 +1,44 @@
+
+/** TOAST **/
+.xion_toast {
+    width: 200px;
+    background: #32b3c4;
+    border-radius: 3px;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    opacity: 0.8;
+    position: fixed;
+    left: 50%;
+    margin-left: -100px;
+    top: 50px;
+    transform: translateY(0px);
+    transition: transform .3s, opacity .3s;
+    opacity: 1;
+    cursor: pointer;
+}
+.xion_toast.error {
+    background: #eb324c;
+}
+.xion_toast.opening {
+    transform: translateY(-40px);
+    opacity: 0;
+    transition: transform .3s, opacity .3s;
+}
+.xion_toast.closing {
+    transform: translateY(40px);
+    opacity: 0;
+    transition: transform .3s, opacity .3s;
+}
+.xion_toast-close {
+    width: 10px;
+    height: 10px;
+    background: url(https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_close_48px-128.png) no-repeat;
+    background-size: cover;
+    cursor: pointer;
+    position: absolute;
+    left: 100%;
+    margin-left: -15px;
+    top: 5px;
+}
+/** TOAST **/
