@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "79c5ae60029cad396de5"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "a224cf871f5a6ebc80e3"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -570,8 +570,24 @@
 
 	var _uiUiJs2 = _interopRequireDefault(_uiUiJs);
 
-	console.log('UI');
-	window.UI = _uiUiJs2['default'];
+	var _exampleSettingsSettingsJs = __webpack_require__(19);
+
+	var _exampleSettingsSettingsJs2 = _interopRequireDefault(_exampleSettingsSettingsJs);
+
+	var _exampleTodoTodoJs = __webpack_require__(23);
+
+	var _exampleTodoTodoJs2 = _interopRequireDefault(_exampleTodoTodoJs);
+
+	window.ui = {};
+	window.ui.settings = new _exampleSettingsSettingsJs2['default'](null);
+	window.ui.popup = new _uiUiJs2['default'].Popup(document.body, {
+	    title: 'User Settings',
+	    content: window.ui.settings
+	});
+	window.ui.popup.render();
+
+	window.ui.todo = new _exampleTodoTodoJs2['default'](document.body);
+	window.ui.todo.render();
 
 /***/ },
 /* 1 */
@@ -589,23 +605,19 @@
 
 	var _SnackBarSnackBarJs2 = _interopRequireDefault(_SnackBarSnackBarJs);
 
-	var _TableTableJs = __webpack_require__(8);
+	var _TableTableJs = __webpack_require__(10);
 
 	var _TableTableJs2 = _interopRequireDefault(_TableTableJs);
 
-	var _TabsTabsJs = __webpack_require__(11);
+	var _TabsTabsJs = __webpack_require__(13);
 
 	var _TabsTabsJs2 = _interopRequireDefault(_TabsTabsJs);
 
-	var _PopupPopupJs = __webpack_require__(14);
+	var _PopupPopupJs = __webpack_require__(16);
 
 	var _PopupPopupJs2 = _interopRequireDefault(_PopupPopupJs);
 
-	var _SettingsSettingsJs = __webpack_require__(17);
-
-	var _SettingsSettingsJs2 = _interopRequireDefault(_SettingsSettingsJs);
-
-	exports['default'] = { SnackBar: _SnackBarSnackBarJs2['default'], Popup: _PopupPopupJs2['default'], Settings: _SettingsSettingsJs2['default'] };
+	exports['default'] = { SnackBar: _SnackBarSnackBarJs2['default'], Popup: _PopupPopupJs2['default'], Tabs: _TabsTabsJs2['default'], Table: _TableTableJs2['default'] };
 	module.exports = exports['default'];
 
 /***/ },
@@ -632,7 +644,7 @@
 
 	var _xionXionJs2 = _interopRequireDefault(_xionXionJs);
 
-	__webpack_require__(4);
+	__webpack_require__(6);
 
 	var SnackBar = (function (_Xion) {
 	    _inherits(SnackBar, _Xion);
@@ -655,7 +667,7 @@
 	    }, {
 	        key: 'view',
 	        value: function view() {
-	            return [['div', { 'class': 'zpbx_snackbar' }, this.drawToast(this.toast)]];
+	            return [['div', { 'class': 'xion_snackbar' }, this.drawToast(this.toast)]];
 	        }
 
 	        /**
@@ -669,7 +681,7 @@
 	        key: 'drawToast',
 	        value: function drawToast(toast) {
 	            if (!toast) return [];
-	            return ['div', { 'class': 'zpbx_toast ' + toast.status + (toast.error ? ' error' : ''), onclick: this.close.bind(this) }, [['div', { 'class': 'zpbx_toast-close' }], toast.msg]];
+	            return ['div', { 'class': 'xion_toast ' + toast.status + (toast.error ? ' error' : ''), onclick: this.close.bind(this) }, [['div', { 'class': 'xion_toast-close' }], toast.msg]];
 	        }
 
 	        /**
@@ -729,7 +741,7 @@
 
 /***/ },
 /* 3 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -739,148 +751,89 @@
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	function forEach(list, f) {
-	    for (var i = 0; i < list.length && !f(list[i], i++);) {}
-	};
+	var _JsonMLDriverJs = __webpack_require__(4);
+
+	var _JsonMLDriverJs2 = _interopRequireDefault(_JsonMLDriverJs);
+
+	var _cloneJs = __webpack_require__(5);
+
+	var _cloneJs2 = _interopRequireDefault(_cloneJs);
+
+	var driver = new WeakMap();
+	/**
+	 * Xion is simple JavaScript class helping to create
+	 * component like user interfaces. It's easy to learn. It doesn't
+	 * contain hard syntax or extensive core methods. You should know JS,
+	 * Driver syntax and this.render method only.
+	 */
 
 	var Xion = (function () {
-	    function Xion(node, opts) {
+	    function Xion(node, opts, mixins) {
+	        var _this = this;
+
 	        _classCallCheck(this, Xion);
 
+	        // Root node using for HTML rendering
 	        this.node = node;
+	        // Like a model
 	        this.storage = {};
+	        // To prevent permanent redrawing of DOM
 	        this.cache = {};
-	        this.state = {};
+	        // Provide DOM links through id attribute into markup
 	        this.$ = {};
-	        // Mixin controller
-	        Object.assign(this, this.controller(opts || {}));
+	        // States
+	        this.previousState = null;
+	        this.state = null;
+	        // Mixin controller to exclude using constructor in components
+	        Object.assign(this.constructor.prototype, this.controller(opts || {}));
+	        // Private
+	        driver.set(this, _JsonMLDriverJs2['default']);
+	        // Mixins
+	        if (!Array.isArray(mixins)) return;
+	        mixins.forEach(function (mixin) {
+	            if (({}).toString.call(mixin) !== "[object Object]") return;
+	            Object.assign(_this.constructor.prototype, mixin);
+	        });
 	    }
+
+	    /**
+	     * Controller. In fact controller is mixin for basic
+	     * constructor. This was made to prevent using constructor
+	     * into child component. Besides somebody could forget that he\she
+	     * need to setup super(node,options).
+	     * @returns {Xion}
+	     */
 
 	    _createClass(Xion, [{
 	        key: 'controller',
-	        value: function controller() {
+	        value: function controller(opts) {
 	            return this;
 	        }
+
+	        /**
+	         * View. Must return data for selected driver. View method
+	         * should be invoked in context of current instance.
+	         * @returns {Array}
+	         */
 	    }, {
 	        key: 'view',
 	        value: function view() {
 	            return [];
 	        }
+
+	        /**
+	         * Update view. And children views too.
+	         */
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            // if(this.shouldComponentUpdate()) return;
-	            this.build(this.node, this.view(), this.cache);
-	        }
-	    }, {
-	        key: 'build',
-	        value: function build(element, data, cache) {
-	            var diffData = [],
-	                children = [];
-
-	            cache.children = cache.children || [];
-
-	            // check if first array item is string, update cache and attributes as appropriate
-	            if (typeof data[0] === 'string') {
-	                cache.node = cache.node || element.appendChild(document.createElement(data[0]));
-	                data.shift();
-	                var attributes = ({}).toString.call(data[0]) === "[object Object]" ? data.shift() : {};
-
-	                if (cache.attrs) {
-	                    forEach(Object.keys(cache.attrs), function (key) {
-	                        if (!attributes[key]) {
-	                            if (key == 'class' && cache.node.getAttribute('className')) cache.node.removeAttribute('className');else cache.node.removeAttribute(key);
-	                            cache.attrs[key] = null;
-	                            delete cache.attrs[key];
-	                        };
-	                    });
-	                } else cache.attrs = {};
-	                // TODO: DRY!
-	                forEach(Object.keys(attributes), (function (key) {
-	                    // Binding
-	                    if (key.substring(0, 2) == 'on') {
-	                        var fn = attributes[key];
-	                        var evt = (function () {
-	                            fn.apply(this, arguments);
-	                            this.render();
-	                        }).bind(this);
-	                        cache.attrs[key] = cache.attrs[key] || Function;
-	                        if (cache.attrs[key].toString() !== fn.toString()) {
-	                            cache.attrs[key] = fn;
-	                            cache.node[key] = evt;
-	                        };
-	                    } else {
-	                        if (attributes[key] !== cache.attrs[key]) {
-	                            // Class
-	                            if (key == 'class' || key == 'className') cache.node.className = attributes[key];
-	                            // Styles
-	                            else if (key == 'style') {
-	                                    forEach(Object.keys(attributes[key]), function (attr) {
-	                                        cache.node.style[attr] = attributes[key][attr];
-	                                    });
-	                                } else {
-	                                    if (key == 'id') this.$[attributes[key]] = cache.node;
-	                                    //console.log(cache.node,key,attributes[key]);
-	                                    //cache.node.setAttribute(key,attributes[key])
-	                                    cache.node[key] = attributes[key];
-	                                }
-	                            cache.attrs[key] = attributes[key];
-	                        };
-	                    };
-	                }).bind(this));
-	            };
-
-	            for (var i = 0, l = data.length; i < l; i++) {
-	                // flatten non-element array one level
-
-	                if (Array.isArray(data[i]) && Array.isArray(data[i][0])) {
-	                    var frag = data.splice(i, 1)[0];
-	                    for (var index = frag.length; index--;) data.splice(i, 0, frag[index]);
-	                    i--;
-	                    l = data.length;
-	                    continue;
-	                };
-	            };
-
-	            diffData = data.slice(0);
-
-	            // loop through cached children and remove entries that do not exist in data
-	            forEach(cache.children, function (child, index) {
-	                var found, position;
-	                for (var i = 0, l = diffData.length; i < l; i++) {
-	                    if (typeof diffData[i] === 'string' && child.node.nodeValue && child.node.nodeValue == diffData[i] || Array.isArray(diffData[i]) && child.node.tagName && child.node.tagName.toLowerCase() == diffData[i][0]) {
-	                        found = true;
-	                        position = data.indexOf(diffData[i]);
-	                        diffData.splice(i, 1);
-	                        break;
-	                    };
-	                };
-	                if (found) children[position] = child;else if (child.node) child.node.parentNode.removeChild(child.node);
-	            });
-	            cache.children = children;
-
-	            // loop through data and update where cache entry not found
-	            forEach(data, (function (child, index) {
-	                cache.children[index] = cache.children[index] || {};
-	                if (Array.isArray(child)) {
-	                    if (cache.node && !cache.children[index].node) {
-	                        cache.children[index] = { "node": document.createElement(child[0]) };
-	                        cache.node.insertBefore(cache.children[index].node, cache.node.childNodes[index] ? cache.node.childNodes[index] : null);
-	                    };
-	                    this.build(cache.node || element, child, cache.children[index]);
-	                } else if (typeof child === 'string') {
-	                    if (!cache.children[index].node || cache.children[index].node.nodeValue !== child) {
-	                        cache.children[index] = { "node": document.createTextNode(child) };
-	                        if (cache.node && cache.node.tagName) cache.node.insertBefore(cache.children[index].node, cache.node.childNodes[index] ? cache.node.childNodes[index] : null);else element.insertBefore(cache.children[index].node, cache.node.childNodes[index] ? cache.node.childNodes[index] : null);
-	                    };
-	                } else if (child instanceof View) {
-	                    child.node = cache.node || element;
-	                    child.parent = this;
-	                    child.render();
-	                };
-	            }).bind(this));
+	            if (this.shouldRender && typeof this.shouldRender === 'function' && !this.shouldRender(this.previousState)) return;
+	            if (this.state) this.previousState = (0, _cloneJs2['default'])(this.state);
+	            driver.get(this).build.call(this, this.node, this.view(), this.cache);
 	        }
 	    }]);
 
@@ -894,20 +847,272 @@
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _XionJs = __webpack_require__(3);
+
+	var _XionJs2 = _interopRequireDefault(_XionJs);
+
+	/**
+	 * JsonML Driver for Xion.
+	 * Learn more about JsonML here - http://www.jsonml.org/
+	 * Briefly - ['tag-name',{attr:attrValue,...},[children]|textContent]
+	 * @type {{}}
+	 */
+	var JsonMLDriver = {
+	    /**
+	     * Basic method. Will be called recursively because of
+	     * JsonML's structure.
+	     */
+	    build: function build(node, data, cache) {
+	        JsonMLDriver.createTag.call(this, node, data, cache);
+	        JsonMLDriver.flattenArray(data);
+	        JsonMLDriver.cleanCache(data, cache);
+	        JsonMLDriver.createChildren.call(this, node, data, cache);
+	    },
+	    /**
+	     * Create tag. First item of responded array
+	     * should be string, more precisely - name of tag. JsonMl supports
+	     * a couple of possible variants of element sequence:
+	     *  - [tagName,attrs,children]
+	     *  - [tagName,attrs]
+	     *  - [tagName,children]
+	     *  - [tagName]
+	     *  - String
+	     */
+	    createTag: function createTag(node, data, cache) {
+	        var _this = this;
+
+	        if (typeof data[0] === 'string') {
+	            (function () {
+	                // Create node. Yes i know that we can create some real tag names checking. But i won't.
+	                cache.node = cache.node || node.appendChild(document.createElement(data[0]));
+	                data.shift();
+	                var attributes = ({}).toString.call(data[0]) === "[object Object]" ? data.shift() : {};
+	                // Remove attributes which was removed from data but still exist into cache.
+	                if (cache.attrs) {
+	                    Object.keys(cache.attrs).forEach(function (key) {
+	                        // This key doesn't meet in data attributes
+	                        if (!attributes[key]) {
+	                            if (key == 'class' && cache.node.getAttribute('className')) cache.node.removeAttribute('className');else cache.node.removeAttribute(key);
+	                            delete cache.attrs[key];
+	                        };
+	                    });
+	                } else cache.attrs = {};
+	                JsonMLDriver.workWithAttributes.call(_this, attributes, cache);
+	            })();
+	        }
+	    },
+	    /**
+	     * Bind function if was added on* attribute.
+	     * setAttributes in another case.
+	     */
+	    workWithAttributes: function workWithAttributes(attributes, cache) {
+	        var _this2 = this;
+
+	        Object.keys(attributes).forEach(function (key) {
+	            // Events
+	            if (key.substring(0, 2) == 'on') {
+	                var fn = attributes[key];
+	                if (typeof fn !== 'function') return;
+	                // If there is no any function binded to cache
+	                cache.attrs[key] = cache.attrs[key] || Function;
+	                // If cached function is different update cache.
+	                if (cache.attrs[key] !== fn) {
+	                    cache.attrs[key] = fn;
+	                    cache.node[key] = fn.bind(_this2);
+	                }
+	            } else {
+	                if (attributes[key] !== cache.attrs[key]) {
+	                    // Class
+	                    if (key == 'class' || key == 'className') cache.node.className = attributes[key];
+	                    // Styles
+	                    else if (key == 'style') {
+	                            Object.keys(attributes[key]).forEach(function (attr) {
+	                                cache.node.style[attr] = attributes[key][attr];
+	                            });
+	                        } else {
+	                            // Provides real DOM links through id attribute
+	                            if (key == 'id') _this2.$[attributes[key]] = cache.node;
+	                            cache.node[key] = attributes[key];
+	                        }
+	                    // Store attributes
+	                    cache.attrs[key] = attributes[key];
+	                }
+	            }
+	        });
+	    },
+	    /**
+	     * Flatten array. Changes array structure
+	     * appropriate JsonML syntax.
+	     */
+	    flattenArray: function flattenArray(data) {
+	        for (var i = 0, l = data.length; i < l; i++) {
+	            if (Array.isArray(data[i]) && Array.isArray(data[i][0])) {
+	                var frag = data.splice(i, 1)[0];
+	                for (var index = frag.length; index--;) {
+	                    data.splice(i, 0, frag[index]);
+	                }i--;
+	                l = data.length;
+	                continue;
+	            }
+	        }
+	    },
+	    /**
+	     * Clean cache. If data was changed we have to
+	     * change cache as well. Old cached nodes and attributes
+	     * must be destroyed.
+	     */
+	    cleanCache: function cleanCache(data, cache) {
+	        cache.children = cache.children || [];
+	        var diffData = [],
+	            children = [];
+	        diffData = data.slice(0);
+	        // Go through cache children
+	        cache.children.forEach(function (child, index) {
+	            var found = undefined,
+	                position = undefined;
+	            // Data difference
+	            for (var i = 0, l = diffData.length; i < l; i++) {
+	                if (typeof diffData[i] === 'string' && child.node.nodeValue && child.node.nodeValue == diffData[i] || Array.isArray(diffData[i]) && child.node.tagName && child.node.tagName.toLowerCase() == diffData[i][0]) {
+	                    found = true;
+	                    position = data.indexOf(diffData[i]);
+	                    diffData.splice(i, 1);
+	                    break;
+	                }
+	            }
+	            // If child was found - update it, else - remove
+	            if (found) children[position] = child;else if (child.node) child.node.parentNode.removeChild(child.node);
+	        });
+	        // Save changed child
+	        cache.children = children;
+	    },
+	    /**
+	     * JsonML has a tree structure. In order to this we
+	     * have to create children such like this how was made
+	     * root element.
+	     */
+	    createChildren: function createChildren(node, data, cache) {
+	        var _this3 = this;
+
+	        // Go through each child
+	        data.forEach(function (child, index) {
+	            cache.children[index] = cache.children[index] || {};
+	            // If it's Array we have to build new element
+	            if (Array.isArray(child)) {
+	                // Create node at first
+	                if (cache.node && !cache.children[index].node) {
+	                    cache.children[index] = { "node": document.createElement(child[0]) };
+	                    cache.node.insertBefore(cache.children[index].node, cache.node.childNodes[index] ? cache.node.childNodes[index] : null);
+	                }
+	                // Build children
+	                JsonMLDriver.build.call(_this3, cache.node || node, child, cache.children[index]);
+	            }
+	            // If it's string we have to create new TextNode
+	            else if (typeof child === 'string') {
+	                    if (!cache.children[index].node || cache.children[index].node.nodeValue !== child) {
+	                        cache.children[index] = { "node": document.createTextNode(child) };
+	                        if (cache.node && cache.node.tagName) {
+	                            cache.node.insertBefore(cache.children[index].node, cache.node.childNodes[index] ? cache.node.childNodes[index] : null);
+	                        } else {
+	                            node.insertBefore(cache.children[index].node, cache.node.childNodes[index] ? cache.node.childNodes[index] : null);
+	                        }
+	                    }
+	                }
+	                // If it's component we have to setup root node and render it.
+	                else if (child instanceof _XionJs2['default']) {
+	                        child.node = cache.node || node;
+	                        child.parent = _this3;
+	                        child.render();
+	                    }
+	        });
+	    }
+	};
+	exports['default'] = JsonMLDriver;
+	module.exports = exports['default'];
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	/**
+	 * Deep clone
+	 * @param src - source object
+	 * @returns {*}
+	 */
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports["default"] = clone;
+
+	function clone(src) {
+	    function mixin(dest, source, copyFunc) {
+	        var name,
+	            s,
+	            i,
+	            empty = {};
+	        for (name in source) {
+	            s = source[name];
+	            if (!(name in dest) || dest[name] !== s && (!(name in empty) || empty[name] !== s)) {
+	                dest[name] = copyFunc ? copyFunc(s) : s;
+	            }
+	        }
+	        return dest;
+	    }
+	    if (!src || typeof src != "object" || Object.prototype.toString.call(src) === "[object Function]") {
+	        return src;
+	    }
+	    if (src.nodeType && "cloneNode" in src) {
+	        return src.cloneNode(true); // Node
+	    }
+	    if (src instanceof Date) {
+	        return new Date(src.getTime());
+	    }
+	    if (src instanceof RegExp) {
+	        return new RegExp(src);
+	    }
+	    var r, i, l;
+	    if (src instanceof Array) {
+	        r = [];
+	        for (i = 0, l = src.length; i < l; ++i) {
+	            if (i in src) {
+	                r.push(clone(src[i]));
+	            }
+	        }
+	    } else {
+	        r = src.constructor ? new src.constructor() : {};
+	    }
+	    return mixin(r, src, clone);
+	}
+
+	module.exports = exports["default"];
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(5);
+	var content = __webpack_require__(7);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(7)(content, {});
+	var update = __webpack_require__(9)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(true) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept(5, function() {
-				var newContent = __webpack_require__(5);
+			module.hot.accept(7, function() {
+				var newContent = __webpack_require__(7);
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -917,21 +1122,21 @@
 	}
 
 /***/ },
-/* 5 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(6)();
+	exports = module.exports = __webpack_require__(8)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "\r\n/** TOAST **/\r\n.zpbx_toast {\r\n    width: 200px;\r\n    background: #32b3c4;\r\n    border-radius: 3px;\r\n    color: #fff;\r\n    text-align: center;\r\n    padding: 10px;\r\n    opacity: 0.8;\r\n    position: fixed;\r\n    left: 50%;\r\n    margin-left: -100px;\r\n    top: 50px;\r\n    transform: translateY(0px);\r\n    transition: transform .3s, opacity .3s;\r\n    opacity: 1;\r\n    cursor: pointer;\r\n}\r\n.zpbx_toast.error {\r\n    background: #eb324c;\r\n}\r\n.zpbx_toast.opening {\r\n    transform: translateY(-40px);\r\n    opacity: 0;\r\n    transition: transform .3s, opacity .3s;\r\n}\r\n.zpbx_toast.closing {\r\n    transform: translateY(40px);\r\n    opacity: 0;\r\n    transition: transform .3s, opacity .3s;\r\n}\r\n.zpbx_toast-close {\r\n    width: 10px;\r\n    height: 10px;\r\n    background: url(https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_close_48px-128.png) no-repeat;\r\n    background-size: cover;\r\n    cursor: pointer;\r\n    position: absolute;\r\n    left: 100%;\r\n    margin-left: -15px;\r\n    top: 5px;\r\n}\r\n/** TOAST **/", ""]);
+	exports.push([module.id, "\r\n/** TOAST **/\r\n.xion_toast {\r\n    width: 200px;\r\n    background: #32b3c4;\r\n    border-radius: 3px;\r\n    color: #fff;\r\n    text-align: center;\r\n    padding: 10px;\r\n    opacity: 0.8;\r\n    position: fixed;\r\n    left: 50%;\r\n    margin-left: -100px;\r\n    top: 50px;\r\n    transform: translateY(0px);\r\n    transition: transform .3s, opacity .3s;\r\n    opacity: 1;\r\n    cursor: pointer;\r\n}\r\n.xion_toast.error {\r\n    background: #eb324c;\r\n}\r\n.xion_toast.opening {\r\n    transform: translateY(-40px);\r\n    opacity: 0;\r\n    transition: transform .3s, opacity .3s;\r\n}\r\n.xion_toast.closing {\r\n    transform: translateY(40px);\r\n    opacity: 0;\r\n    transition: transform .3s, opacity .3s;\r\n}\r\n.xion_toast-close {\r\n    width: 10px;\r\n    height: 10px;\r\n    background: url(https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_close_48px-128.png) no-repeat;\r\n    background-size: cover;\r\n    cursor: pointer;\r\n    position: absolute;\r\n    left: 100%;\r\n    margin-left: -15px;\r\n    top: 5px;\r\n}\r\n/** TOAST **/", ""]);
 
 	// exports
 
 
 /***/ },
-/* 6 */
+/* 8 */
 /***/ function(module, exports) {
 
 	/*
@@ -986,7 +1191,7 @@
 	};
 
 /***/ },
-/* 7 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -1240,7 +1445,7 @@
 
 
 /***/ },
-/* 8 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1263,7 +1468,7 @@
 
 	var _xionXionJs2 = _interopRequireDefault(_xionXionJs);
 
-	__webpack_require__(9);
+	__webpack_require__(11);
 
 	var Table = (function (_Xion) {
 	    _inherits(Table, _Xion);
@@ -1283,7 +1488,7 @@
 	    }, {
 	        key: 'view',
 	        value: function view() {
-	            return ['table', { 'class': 'zpbx_table' }, ['thead', this.drawHead()], ['tbody', this.drawBody()]];
+	            return ['table', { 'class': 'xion_table' }, ['thead', this.drawHead()], ['tbody', this.drawBody()]];
 	        }
 	    }, {
 	        key: 'drawHead',
@@ -1313,23 +1518,23 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 9 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(10);
+	var content = __webpack_require__(12);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(7)(content, {});
+	var update = __webpack_require__(9)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(true) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept(10, function() {
-				var newContent = __webpack_require__(10);
+			module.hot.accept(12, function() {
+				var newContent = __webpack_require__(12);
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -1339,21 +1544,21 @@
 	}
 
 /***/ },
-/* 10 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(6)();
+	exports = module.exports = __webpack_require__(8)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "/** TABLE **/\r\n.zpbx_table {\r\n    width: 100%;\r\n}\r\n.zpbx_table th {\r\n    text-align: left;\r\n    padding: 5px 0;\r\n}\r\n.zpbx_table td {\r\n    padding: 0 5px 0 0;\r\n}\r\n.zpbx_table .zpbx_table-select {\r\n    text-decoration: underline;\r\n    cursor: pointer;\r\n}\r\n.zpbx_table-link {\r\n    text-decoration: underline;\r\n    cursor: pointer;\r\n}", ""]);
+	exports.push([module.id, "/** TABLE **/\r\n.xion_table {\r\n    width: 100%;\r\n}\r\n.xion_table th {\r\n    text-align: left;\r\n    padding: 5px 0;\r\n}\r\n.xion_table td {\r\n    padding: 0 5px 0 0;\r\n}\r\n.xion_table .xion_table-select {\r\n    text-decoration: underline;\r\n    cursor: pointer;\r\n}\r\n.xion_table-link {\r\n    text-decoration: underline;\r\n    cursor: pointer;\r\n}", ""]);
 
 	// exports
 
 
 /***/ },
-/* 11 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1376,7 +1581,7 @@
 
 	var _xionXionJs2 = _interopRequireDefault(_xionXionJs);
 
-	__webpack_require__(12);
+	__webpack_require__(14);
 
 	var Tabs = (function (_Xion) {
 	    _inherits(Tabs, _Xion);
@@ -1397,7 +1602,7 @@
 	    }, {
 	        key: 'view',
 	        value: function view() {
-	            return ['div', { 'class': 'zpbx_tabs' }, ['div', { 'class': 'zpbx_tabs-control' }, this.drawControl()], ['div', { 'class': 'zpbx_tabs-content' }, this.drawContent()]];
+	            return ['div', { 'class': 'xion_tabs' }, ['div', { 'class': 'xion_tabs-control' }, this.drawControl()], ['div', { 'class': 'xion_tabs-content' }, this.drawContent()]];
 	        }
 	    }, {
 	        key: 'drawControl',
@@ -1406,9 +1611,9 @@
 
 	            return this.tabs.map(function (tab, i) {
 	                return ['div', {
-	                    'class': 'zpbx_tabs-control-item' + (_this.selected == i ? ' selected' : ''),
+	                    'class': 'xion_tabs-control-item' + (_this.selected == i ? ' selected' : ''),
 	                    onclick: _this.select.bind(_this, i)
-	                }, tab.label, ['div', { 'class': 'zpbx_tabs-control-item-line' }]];
+	                }, tab.label, ['div', { 'class': 'xion_tabs-control-item-line' }]];
 	            });
 	        }
 	    }, {
@@ -1417,7 +1622,7 @@
 	            var _this2 = this;
 
 	            return this.tabs.map(function (tab, i) {
-	                return ['div', { 'class': 'zpbx_tabs-content-item' + (_this2.selected == i ? '' : ' hide') }, typeof tab.content == 'function' ? tab.content() : tab.content];
+	                return ['div', { 'class': 'xion_tabs-content-item' + (_this2.selected == i ? '' : ' hide') }, typeof tab.content == 'function' ? tab.content() : tab.content];
 	            });
 	        }
 	    }, {
@@ -1436,23 +1641,23 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 12 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(13);
+	var content = __webpack_require__(15);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(7)(content, {});
+	var update = __webpack_require__(9)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(true) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept(13, function() {
-				var newContent = __webpack_require__(13);
+			module.hot.accept(15, function() {
+				var newContent = __webpack_require__(15);
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -1462,21 +1667,21 @@
 	}
 
 /***/ },
-/* 13 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(6)();
+	exports = module.exports = __webpack_require__(8)();
 	// imports
 
 
 	// module
-	exports.push([module.id, ".zpbx_tabs {\r\n\r\n}\r\n.zpbx_tabs .zpbx_tabs-control {\r\n    padding: 10px 0 0 0;\r\n    border-bottom: 1px solid #ccc;\r\n}\r\n.zpbx_tabs .zpbx_tabs-control .zpbx_tabs-control-item {\r\n    position: relative;\r\n    display: inline-block;\r\n    cursor: pointer;\r\n    padding: 8px 20px;\r\n    border: 1px solid #ccc;\r\n    border-bottom: none;\r\n    border-radius: 3px 3px 0 0;\r\n    background: #f2f2f2;\r\n}\r\n.zpbx_tabs-control-item-line {\r\n    display: none;\r\n    position: absolute;\r\n    width: 100%;\r\n    height: 3px;\r\n    top: 100%;\r\n    left: 0;\r\n    background: #fff;\r\n}\r\n.zpbx_tabs .zpbx_tabs-control .zpbx_tabs-control-item.selected {\r\n    background: #fff;\r\n}\r\n.zpbx_tabs .zpbx_tabs-control .zpbx_tabs-control-item.selected .zpbx_tabs-control-item-line {\r\n    display: block;\r\n}\r\n.zpbx_tabs .zpbx_tabs-content {\r\n    width: 800px;\r\n    border: 1px solid #ccc;\r\n    border-top: none;\r\n}\r\n.zpbx_tabs .zpbx_tabs-content .zpbx_tabs-content-item {\r\n\r\n}\r\n.zpbx_tabs .zpbx_tabs-content .zpbx_tabs-content-item.hide {\r\n    display: none;\r\n}\r\n", ""]);
+	exports.push([module.id, ".xion_tabs {\r\n\r\n}\r\n.xion_tabs .xion_tabs-control {\r\n    padding: 10px 0 0 0;\r\n    border-bottom: 1px solid #ccc;\r\n}\r\n.xion_tabs .xion_tabs-control .xion_tabs-control-item {\r\n    position: relative;\r\n    display: inline-block;\r\n    cursor: pointer;\r\n    padding: 8px 20px;\r\n    border: 1px solid #ccc;\r\n    border-bottom: none;\r\n    border-radius: 3px 3px 0 0;\r\n    background: #f2f2f2;\r\n}\r\n.xion_tabs-control-item-line {\r\n    display: none;\r\n    position: absolute;\r\n    width: 100%;\r\n    height: 3px;\r\n    top: 100%;\r\n    left: 0;\r\n    background: #fff;\r\n}\r\n.xion_tabs .xion_tabs-control .xion_tabs-control-item.selected {\r\n    background: #fff;\r\n}\r\n.xion_tabs .xion_tabs-control .xion_tabs-control-item.selected .xion_tabs-control-item-line {\r\n    display: block;\r\n}\r\n.xion_tabs .xion_tabs-content {\r\n    width: 800px;\r\n    border: 1px solid #ccc;\r\n    border-top: none;\r\n}\r\n.xion_tabs .xion_tabs-content .xion_tabs-content-item {\r\n\r\n}\r\n.xion_tabs .xion_tabs-content .xion_tabs-content-item.hide {\r\n    display: none;\r\n}\r\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 14 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1499,7 +1704,7 @@
 
 	var _xionXionJs2 = _interopRequireDefault(_xionXionJs);
 
-	__webpack_require__(15);
+	__webpack_require__(17);
 
 	var Popup = (function (_Xion) {
 	    _inherits(Popup, _Xion);
@@ -1523,7 +1728,7 @@
 	    }, {
 	        key: 'view',
 	        value: function view() {
-	            return ['div', { 'class': 'zpbx_popup' + (this.opened ? ' opened' : ''), id: 'popup' }, ['div', { 'class': 'zpbx_overlay', onclick: this.close, id: 'overlay', style: { zIndex: this.zIndex } }], ['div', { 'class': 'zpbx_window', id: 'window', style: { zIndex: this.zIndex } }, ['div', { 'class': 'zpbx_window-title' }, this.title], ['div', { 'class': 'zpbx_window-close', onclick: this.close }], ['div', { 'class': 'zpbx_window-content' }, typeof this.content == 'function' ? this.content() : this.content]]];
+	            return ['div', { 'class': 'xion_popup' + (this.opened ? ' opened' : ''), id: 'popup' }, ['div', { 'class': 'xion_overlay', onclick: this.close, id: 'overlay', style: { zIndex: this.zIndex } }], ['div', { 'class': 'xion_window', id: 'window', style: { zIndex: this.zIndex } }, ['div', { 'class': 'xion_window-title' }, this.title], ['div', { 'class': 'xion_window-close', onclick: this.close }], ['div', { 'class': 'xion_window-content' }, typeof this.content == 'function' ? this.content() : this.content]]];
 	        }
 
 	        /**
@@ -1569,23 +1774,23 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 15 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(16);
+	var content = __webpack_require__(18);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(7)(content, {});
+	var update = __webpack_require__(9)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(true) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept(16, function() {
-				var newContent = __webpack_require__(16);
+			module.hot.accept(18, function() {
+				var newContent = __webpack_require__(18);
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -1595,21 +1800,21 @@
 	}
 
 /***/ },
-/* 16 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(6)();
+	exports = module.exports = __webpack_require__(8)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "\r\n/** POPUP **/\r\n.zpbx_popup {\r\n\r\n}\r\n.zpbx_overlay {\r\n    position: fixed;\r\n    width: 100%;\r\n    height: 100%;\r\n    background: rgba(0,0,0,0.4);\r\n    display: none;\r\n    z-index: 100;\r\n}\r\n.zpbx_popup.opened .zpbx_overlay {\r\n    display: block;\r\n}\r\n.zpbx_window {\r\n    position: absolute;\r\n    display: inline-block;\r\n    padding: 20px;\r\n    background: #fff;\r\n    border-radius: 4px;\r\n    left: 50%;\r\n    top: 50%;\r\n    display: none;\r\n    opacity: 1;\r\n    transform: translateY(0px);\r\n    transition: opacity .4s,transform .2s;\r\n    z-index: 101;\r\n}\r\n.zpbx_popup.opened .zpbx_window {\r\n    display: block;\r\n}\r\n.zpbx_window.animation {\r\n    opacity: 0;\r\n    transform: translateY(-40px);\r\n    transition: opacity .4s,transform .2s;\r\n}\r\n.zpbx_window .zpbx_window-close {\r\n    width: 20px;\r\n    height: 20px;\r\n    background: url(https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_close_48px-128.png) no-repeat;\r\n    background-size: cover;\r\n    cursor: pointer;\r\n    position: absolute;\r\n    left: 100%;\r\n    margin-left: -25px;\r\n    top: 5px;\r\n}\r\n.zpbx_window .zpbx_window-title {\r\n    font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\r\n    font-size: 18px;\r\n    font-weight: 700;\r\n    color: #09345d;\r\n    text-align: center;\r\n    text-transform: uppercase;\r\n    padding-bottom: 5px;\r\n}\r\n.zpbx_window .zpbx_window-content {\r\n    font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\r\n    font-size: 14px;\r\n    color: #09345d;\r\n}\r\n.zpbx_window .zpbx_window-content h2 {\r\n    font-size: 18px;\r\n    font-weight: 700;\r\n    color: #002041;\r\n}\r\n/** POPUP **/", ""]);
+	exports.push([module.id, "\r\n/** POPUP **/\r\n.xion_popup {\r\n    display: block;\r\n    position: absolute;\r\n    top: 0;\r\n    left: 0;\r\n}\r\n.xion_popup.opened {\r\n    width: 100%;\r\n    height: 100%;\r\n}\r\n.xion_overlay {\r\n    position: fixed;\r\n    width: 100%;\r\n    height: 100%;\r\n    background: rgba(0,0,0,0.4);\r\n    display: none;\r\n    z-index: 100;\r\n}\r\n.xion_popup.opened .xion_overlay {\r\n    display: block;\r\n}\r\n.xion_window {\r\n    position: absolute;\r\n    display: inline-block;\r\n    padding: 20px;\r\n    background: #fff;\r\n    border-radius: 4px;\r\n    left: 50%;\r\n    top: 50%;\r\n    display: none;\r\n    opacity: 1;\r\n    transform: translateY(0px);\r\n    transition: opacity .4s,transform .2s;\r\n    z-index: 101;\r\n}\r\n.xion_popup.opened .xion_window {\r\n    display: block;\r\n}\r\n.xion_window.animation {\r\n    opacity: 0;\r\n    transform: translateY(-40px);\r\n    transition: opacity .4s,transform .2s;\r\n}\r\n.xion_window .xion_window-close {\r\n    width: 20px;\r\n    height: 20px;\r\n    background: url(https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_close_48px-128.png) no-repeat;\r\n    background-size: cover;\r\n    cursor: pointer;\r\n    position: absolute;\r\n    left: 100%;\r\n    margin-left: -25px;\r\n    top: 5px;\r\n}\r\n.xion_window .xion_window-title {\r\n    font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\r\n    font-size: 18px;\r\n    font-weight: 700;\r\n    color: #09345d;\r\n    text-align: center;\r\n    text-transform: uppercase;\r\n    padding-bottom: 5px;\r\n}\r\n.xion_window .xion_window-content {\r\n    font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\r\n    font-size: 14px;\r\n    color: #09345d;\r\n}\r\n.xion_window .xion_window-content h2 {\r\n    font-size: 18px;\r\n    font-weight: 700;\r\n    color: #002041;\r\n}\r\n/** POPUP **/", ""]);
 
 	// exports
 
 
 /***/ },
-/* 17 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1632,9 +1837,13 @@
 
 	var _xionXionJs2 = _interopRequireDefault(_xionXionJs);
 
-	var _TabsTabsJs = __webpack_require__(11);
+	var _uiUiJs = __webpack_require__(1);
 
-	var _TabsTabsJs2 = _interopRequireDefault(_TabsTabsJs);
+	var _uiUiJs2 = _interopRequireDefault(_uiUiJs);
+
+	var _UserSettingsUserSettingsJs = __webpack_require__(20);
+
+	var _UserSettingsUserSettingsJs2 = _interopRequireDefault(_UserSettingsUserSettingsJs);
 
 	var Settings = (function (_Xion) {
 	    _inherits(Settings, _Xion);
@@ -1647,11 +1856,30 @@
 
 	    _createClass(Settings, [{
 	        key: 'controller',
-	        value: function controller() {}
+	        value: function controller() {
+	            this.userSettings = new _UserSettingsUserSettingsJs2['default'](null);
+	            this.tabs = new _uiUiJs2['default'].Tabs(null, {
+	                onSelect: this.tabSelect.bind(this),
+	                tabs: [{
+	                    label: 'User settings',
+	                    content: this.userSettings
+	                }, {
+	                    label: 'Inject pure JsonML',
+	                    content: function content() {
+	                        return ['h1', 'Pure JsonML'];
+	                    }
+	                }]
+	            });
+	        }
 	    }, {
 	        key: 'view',
 	        value: function view() {
-	            return ['div', { 'class': 'zpbx_settings' }];
+	            return ['div', { 'class': 'xe_settings' }, this.tabs];
+	        }
+	    }, {
+	        key: 'tabSelect',
+	        value: function tabSelect() {
+	            this.parent.reposition();
 	        }
 	    }]);
 
@@ -1659,6 +1887,226 @@
 	})(_xionXionJs2['default']);
 
 	exports['default'] = Settings;
+	module.exports = exports['default'];
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _UserSettingsCss = __webpack_require__(21);
+
+	var _UserSettingsCss2 = _interopRequireDefault(_UserSettingsCss);
+
+	var _xionXionJs = __webpack_require__(3);
+
+	var _xionXionJs2 = _interopRequireDefault(_xionXionJs);
+
+	var _uiUiJs = __webpack_require__(1);
+
+	var _uiUiJs2 = _interopRequireDefault(_uiUiJs);
+
+	var UserSettings = (function (_Xion) {
+	    _inherits(UserSettings, _Xion);
+
+	    function UserSettings() {
+	        _classCallCheck(this, UserSettings);
+
+	        _get(Object.getPrototypeOf(UserSettings.prototype), 'constructor', this).apply(this, arguments);
+	    }
+
+	    _createClass(UserSettings, [{
+	        key: 'controller',
+	        value: function controller() {
+	            this.table = new _uiUiJs2['default'].Table(null, {
+	                head: [{ text: 'Login' }, { text: 'Email' }, { text: 'Role' }],
+	                body: []
+	            });
+	            this.getData();
+	        }
+	    }, {
+	        key: 'view',
+	        value: function view() {
+	            return ['div', { 'class': 'xe_user_settings' }, ['input', { type: 'text', placeholder: 'Enter search term', oninput: this.filter, id: 'filter' }], this.table];
+	        }
+	    }, {
+	        key: 'getData',
+	        value: function getData() {
+	            var _this = this;
+
+	            setTimeout(function () {
+	                _this.table.body = [[{ text: 'kysonic' }, { text: 'soooyc@gmail.com' }, { text: 'admin', prop: { onclick: _this.changeRole, 'class': 'xe_user_settings-role' } }], [{ text: 'baton' }, { text: 'a.miroshnichenko@zebratelecom.ru' }, { text: 'admin', prop: { onclick: _this.changeRole, 'class': 'xe_user_settings-role' } }], [{ text: 'nigga' }, { text: 'black@zebratelecom.ru' }, { text: 'user', prop: { onclick: _this.changeRole, 'class': 'xe_user_settings-role' } }]];
+	                _this.storage.body = _this.table.body;
+	                _this.table.render();
+	            }, 2000);
+	        }
+	    }, {
+	        key: 'filter',
+	        value: function filter() {
+	            var _this2 = this;
+
+	            this.table.body = this.storage.body.filter(function (item) {
+	                return new RegExp('.*' + _this2.$.filter.value + '.*').test(item[1].text);
+	            });
+	            this.render();
+	        }
+	    }, {
+	        key: 'changeRole',
+	        value: function changeRole(td) {
+	            td.text = td.text == 'admin' ? 'user' : 'admin';
+	            this.table.render();
+	        }
+	    }]);
+
+	    return UserSettings;
+	})(_xionXionJs2['default']);
+
+	exports['default'] = UserSettings;
+	module.exports = exports['default'];
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(22);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(9)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(true) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept(22, function() {
+				var newContent = __webpack_require__(22);
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(8)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".xe_user_settings {\r\n    padding: 10px;\r\n}\r\n.xe_user_settings-role {\r\n    cursor: pointer;\r\n}", ""]);
+
+	// exports
+
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _xionXionJs = __webpack_require__(3);
+
+	var _xionXionJs2 = _interopRequireDefault(_xionXionJs);
+
+	var Todo = (function (_Xion) {
+	    _inherits(Todo, _Xion);
+
+	    function Todo() {
+	        _classCallCheck(this, Todo);
+
+	        _get(Object.getPrototypeOf(Todo.prototype), 'constructor', this).apply(this, arguments);
+	    }
+
+	    _createClass(Todo, [{
+	        key: 'controller',
+	        value: function controller() {
+	            this.state = {
+	                items: []
+	            };
+	            this.useAdd2 = false;
+	        }
+	    }, {
+	        key: 'view',
+	        value: function view() {
+	            return ['div', { 'class': 'xe_todo' }, ['ul', { 'class': 'xe_todo-items' }, this.drawItems()], ['input', { 'class': 'xe_todo-input', type: 'text', placeholder: 'Enter item title', id: 'xetInput' }], ['button', { 'class': 'xe_todo-button', onclick: this.useAdd2 ? this.add2 : this.add }, 'ADD #' + (parseInt(this.state.items.length) + 1)], ['button', { 'class': 'xe_todo-button', onclick: this.showState }, 'ShowState']];
+	        }
+	    }, {
+	        key: 'drawItems',
+	        value: function drawItems() {
+	            return this.state.items.map(function (item) {
+	                return ['li', { 'class': 'xe_todo-item' }, item.title];
+	            });
+	        }
+	    }, {
+	        key: 'add',
+	        value: function add() {
+	            console.log('Add1');
+	            this.state.items.push({ title: this.$.xetInput.value });
+	            this.render();
+	            this.$.xetInput.value = '';
+	        }
+	    }, {
+	        key: 'add2',
+	        value: function add2() {
+	            console.log('Add2');
+	            this.state.items.push({ title: this.$.xetInput.value });
+	            this.render();
+	            this.$.xetInput.value = '';
+	        }
+	    }, {
+	        key: 'shouldRender',
+	        value: function shouldRender(previousState) {
+	            if (!previousState) return true;
+	            // Compare
+	            return previousState.items.length != this.state.items.length;
+	        }
+	    }, {
+	        key: 'showState',
+	        value: function showState() {
+	            console.log(this.state);
+	            this.useAdd2 = true;
+	        }
+	    }]);
+
+	    return Todo;
+	})(_xionXionJs2['default']);
+
+	exports['default'] = Todo;
 	module.exports = exports['default'];
 
 /***/ }

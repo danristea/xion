@@ -19,7 +19,7 @@ class Settings extends Xion {
                     }
                 }
             ]
-        })
+        });
     }
     view() {
         return ['div',{class:'xe_settings'},this.tabs]
