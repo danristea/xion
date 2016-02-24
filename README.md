@@ -140,7 +140,7 @@ var component = new Component(document.body,{items:[...]}); // items here
 component.render(); 
 ```
 
-### DOM links 
+### DOM links. 
 
 Xion has simple mechanism helping you retrieve DOM nodes from your component. For this you should to set id attribute to some node into your JsonML markup and get it through calling *this.$['nodeID']*.
 
@@ -171,7 +171,7 @@ component.render();
 console.log(component.$); // {root: <div .../>,title: <h1 .../>}
 ```
 
-### Events
+### Events.
 
 Xion doesn't have any special syntax to define event listeners. In this case you can use simple HTML attributes like: onclick,oninput,onchange, etc. 
 
@@ -192,7 +192,7 @@ class Component extends Xion {
 export default Component;
 ```
 
-###Child components
+###Child components.
 
 One of basic concept providing comfortable interface development - nested components. In Xion it was implemented pretty easy - you have to put child component in JsonML markup of your parent component. 
 
@@ -239,7 +239,7 @@ Any child component will contain special property - parent - link on parent inst
 this.child.render();
 ```
 
-### States
+### States.
 
 Like React Xion has states, but there is no necessity to use this.setState to update view. View can be updated only through this.render() method. States can be used to prevent useless view updating. If you want to use states in your component you have to define **this.state** property in your component class, otherwise state procudures won't be used.   
 
@@ -275,7 +275,7 @@ class Component extends Xion {
 }
 ```
 
-### Mixins and components inheritance 
+### Mixins and components inheritance. 
 
 If you want to extend functionality of your *certain component instance* you have to use mixins. Mixins it is objects containing some methods wich will be mixed with the component instance. To do this you have to add mixin(-s) like a third paramter of component constructor: 
 
@@ -317,7 +317,7 @@ class MyPopup extends UI.Popup {
 export default MyPopup;
 ```
 
-###Caching 
+###Caching. 
 
 To prevent permanent full DOM reconstructing Xion uses caching. All of Xion components have *this.cache* property which consists current DOM states. For instance, this.cache.node - root node, this.cache.attrs - its attributes, this.cache.children - its children. When render() method will be called, component cache system will check differences between new view markup and current rendered DOM and resolve it properly. 
 
@@ -346,7 +346,7 @@ If you want to use Xion without any transpilers you can load Xion directly and w
 ```
 You can find more examples into [tests](https://github.com/kysonic/xion/tree/master/tests). 
 
-##Bundles 
+##Bundles. 
 
 Build folder of this project contains a few bundles:
 
@@ -356,15 +356,23 @@ Build folder of this project contains a few bundles:
 | xion.min.es6.js        | Contains Xion class and required ES6 polyfills.|
 | xion.min.ui.js         | Contains Xion class and required ES6 polyfills and UI set. (in progress)|
 
-##Examples 
+##Examples. 
 
 To leran more about Xion you can check [this](https://github.com/kysonic/xion/tree/master/src/example) examples. 
 
-## Bugs, enhancements, suggestions
+##Tests.
+
+Run tests:  
+
+```
+npm test
+```
+
+## Bugs, enhancements, suggestions.
 
 If you want to help make this project better you can add your suggestions [here](https://github.com/kysonic/xion/issues). This also applies to bugs and enhancements. 
 
-## Contributing 
+## Contributing.
 
 1. Fork the repo. 
 2. Write your code. 
