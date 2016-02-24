@@ -1,15 +1,15 @@
-# xion
+# Xion
 
-Xion is a lightweight client-side library for building component like user interfaces. The main purpose of Xion is creating UI components fast without any difficult agreements regarding library methods, naming, hard syntax, etc. All what you have to know that you will be able to use Xion is JavaScript and JsonML only. Xion can be used like a constituent part of your custom library which have to be able to create some interfaces. 
+Xion is a lightweight client-side library (in fact it's class) for building component like user interfaces. The main purpose of Xion is creating UI components fast without any difficult agreements regarding library methods, naming, hard syntax, etc. All what you have to know that you will be able to use Xion is JavaScript and JsonML only. Xion can be used like a constituent part of your custom library which have to be able to create some interfaces. 
 
-##Download Xion
+##Download Xion.
 
 ```
 npm install xion
 git clone https://github.com/kysonic/xion
 ```
 
-##Quick example 
+##Quick example.
 
 This project uses ES6 via babel and webpack and it's reason why all of presented examples will be written using ES6 classes. Besides it's more convinient. If you don't want to use ES6 go [here](#here).
 
@@ -63,6 +63,9 @@ todo.render();
 
 ```
 
+Check this [example](https://github.com/kysonic/xion/tree/master/src/example/Todo). 
+
+##Basic concepts.
 
 
 
