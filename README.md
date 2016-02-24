@@ -68,7 +68,7 @@ Check this [example](https://github.com/kysonic/xion/tree/master/src/example/Tod
 
 ##Basic concepts.
 
-Following text will consist of descriptions of basic ideas which largely was stolen from React, Riot, Polymer, etc. 
+Following text consists of descriptions of basic ideas which largely was stolen from React, Riot, Polymer, etc. 
 
 ### Instantiation.
 
