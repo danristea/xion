@@ -22,6 +22,7 @@ import Xion from '../../xion/Xion.js';
 class Todo extends Xion {
     controller(opts) {
         this.items = opts.items||[];
+        return this;
     }
     view() {
         return ['div',{class:'xe_todo'},
@@ -71,7 +72,7 @@ Following text will consist of descriptions of basic ideas which largely was sto
 
 ### Structure. 
 
-Any Xion component should be a class. There is only one required method which must be included into the class - view(). Otherwise your component will render a great emptiness. The view method has to return [JsonML](http://www.jsonml.org/). 
+Any Xion component should be a **class**. There is only one required method which must be included into the class - **view()**. Otherwise your component will render great emptiness. The view method has to return [JsonML](http://www.jsonml.org/). 
 
 ```
 import Xion from 'xion';
@@ -81,6 +82,7 @@ class Component extends Xion {
         return ['div',{'xion_component'},'Component Here!'];
     }
 }
+
 export default Component;
 ```
 
@@ -97,5 +99,29 @@ Xion extends the concept a little bit to provide nested components:
 ```
 
 That means you can build nested component structure for your interfaces, we will speak about child compponents [below](#children).
+
+Any Xion component can contain **contoller()** method. In fact the controller is mixin transmiting options and mixins bypassing constructor. It was made because otherwise you would have to transmit all required parameters in component constructor that could be less convinient than described approach. Also controller needed to transmit options into component. 
+
+Component.js: 
+
+```
+import Xion from 'xion';
+
+class Component extends Xion {
+    controller(opts) {
+        this.items = opts.items; // Default items transmited trhough Component constructor. 
+    }
+}
+
+export default Component;
+```
+
+main.js 
+
+```
+import Component from './components/Component.js';
+var component = new Component(document.body,{items:[...]}); // items here
+```
+
 
 
