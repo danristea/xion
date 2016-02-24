@@ -241,7 +241,7 @@ this.child.render();
 
 ### States
 
-Like React Xion has states, but there is no necessity to use this.setState to update view. View can be updated only through this.render() method. States is needed to prevent useless view updating. If you want to use states in your component you have to define **this.state** property in your component class, otherwise state procudures won't be used.   
+Like React Xion has states, but there is no necessity to use this.setState to update view. View can be updated only through this.render() method. States can be used to prevent useless view updating. If you want to use states in your component you have to define **this.state** property in your component class, otherwise state procudures won't be used.   
 
 ```
 import Xion from 'xion';
@@ -316,6 +316,12 @@ class MyPopup extends UI.Popup {
 
 export default MyPopup;
 ```
+
+###Caching 
+
+To prevent permanent full DOM reconstructing Xion uses caching. All of Xion components have *this.cache* property which consists current DOM states. For instance, this.cache.node - root node, this.cache.attrs - its attributes, this.cache.children - its children. When render() method will be called, component cache system will check differences between new view markup and current rendered DOM and resolve it properly. 
+
+Anyway Xion wasn't made like system for building big data interfaces. There are no any collection manipulation methods like for instance, this.push('items',{...}) in Polymer. 
 
 
 
