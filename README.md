@@ -1,6 +1,6 @@
 # Xion
 
-Xion is a lightweight client-side library (in fact it's class) for building component like user interfaces. The main purpose of Xion is creating UI components fast, without any difficult agreements regarding library methods, naming, hard syntax, etc. All what you have to know that you will be able to use Xion are JavaScript and [JsonML](http://www.jsonml.org/) only. Xion can be used like a constituent part of your custom library which has to create some interfaces. 
+Xion is a lightweight (4.6kb) client-side library (in fact it's class) for building component like user interfaces. The main purpose of Xion is creating UI components fast, without any difficult agreements regarding library methods, naming, hard syntax, etc. All what you have to know that you will be able to use Xion are JavaScript and [JsonML](http://www.jsonml.org/) only. Xion can be used like a constituent part of your custom library which has to create some interfaces. 
 
 ##Download Xion.
 
@@ -77,7 +77,7 @@ import UI from 'xion.ui.js';
 
 var popup = new UI.Popup(document.body,{title:'My Popup!'},[Mixin]);
 ```
-First paramater is **DOM node** component will be rendered in. Second is **options** transmited to component instance as defaults. Third is **Array of mixins** using in the * component instance*.
+First paramater is **DOM node** component will be rendered in. Second is **options** transmited to component instance as defaults. Third is **Array of mixins** using in the *component instance*.
 
 By default the component won't render. You should invoke render() method manually. 
 
@@ -142,7 +142,7 @@ component.render();
 
 ### DOM links 
 
-Xion has simple mechanism helping you retrieve DOM nodes from your component. For this you should to set id attribute to some node into your JsonML markup and get it through calling this.$['nodeID'].
+Xion has simple mechanism helping you retrieve DOM nodes from your component. For this you should to set id attribute to some node into your JsonML markup and get it through calling *this.$['nodeID']*.
 
 Component.js 
 
@@ -190,6 +190,131 @@ class Component extends Xion {
 }
 
 export default Component;
+```
+
+###Child components
+
+One of basic concept providing comfortable interface development - nested components. In Xion it was implemented pretty easy - you have to put child component in JsonML markup of your parent component. 
+
+Child.js
+
+```
+import Xion from 'xion';
+
+class Child extends Xion {
+    view() {
+        return ['div',{class:'xion_child',id:'root'},'Child markup'];
+    }
+    childMethod() {
+        this.parent.parentMethod();
+    }
+}
+
+export default Child;
+```
+
+Component.js
+
+```
+import Xion from 'xion';
+import Child from '../Child.js';
+
+class Component extends Xion {
+    controller() {
+        this.child = new Child(null,{});
+    }
+    view() {
+        return ['div',{class:'xion_component',id:'root'},this.child];
+    }
+    parentMethod() {
+        console.log('Parent method was invoked from child component.');
+    }
+}
+
+export default Child;
+```
+Any child component will contain special property - parent - link on parent instance. If you will call render method of parent component the child component *will be updated as well*, but reverse statement is wrong. Also you can update only child component's view calling 
+
+```
+this.child.render();
+```
+
+### States
+
+Like React Xion has states, but there is no necessity to use this.setState to update view. View can be updated only through this.render() method. States is needed to prevent useless view updating. If you want to use states in your component you have to define **this.state** property in your component class, otherwise state procudures won't be used.   
+
+```
+import Xion from 'xion';
+
+class Component extends Xion {
+    controller() {
+        this.state = {v:1}
+    }
+    view() {
+        return ['div',{class:'xion_component',id:'root'},'V='+this.state.v];
+    }
+}
+```
+
+To define whether your component should update you have to include **shouldRender()** method in your component class. If the method will return true - component view will be updated, else - nope. 
+
+```
+import Xion from 'xion';
+
+class Component extends Xion {
+    controller() {
+        this.state = {v:1}
+    }
+    view() {
+        return ['div',{class:'xion_component',id:'root'},'V='+this.state.v];
+    }
+    shouldRender(previousState) {
+        if(!previousState) return true; // If state wasn't defined - render
+        return previousState.v!=this.state.v; 
+    }
+}
+```
+
+### Mixins and components inheritance 
+
+If you want to extend functionality of your *certain component instance* you have to use mixins. Mixins it is objects containing some methods wich will be mixed with the component instance. To do this you have to add mixin(-s) like a third paramter of component constructor: 
+
+XionMixin.js
+
+```
+export default {
+    mixinMethod() {
+        console.log('Mixin method was called.');
+    }
+}
+```
+
+main.js 
+
+```
+import UI from 'xion.ui.js'; 
+import XionMixin from './XionMixin.js';
+
+var popup = new UI.Popup(document.body,{title:'My Popup!'},[XionMixin]);
+popup.render();
+popup.mixinMethod(); // Mixin method was called.
+```
+
+If you want to make some component based on another component you can just extend your component class. 
+
+MyPopup.js 
+
+```
+import UI from 'xion.ui.js'; 
+
+class MyPopup extends UI.Popup {
+    changePopupTitle(title) {
+        this.title = title;
+        this.render(); 
+    }
+}
+
+export default MyPopup;
 ```
 
 
