@@ -11,7 +11,7 @@ git clone https://github.com/kysonic/xion
 
 ##Quick example.
 
-This project uses ES6 via babel and webpack and it's reason why all of presented examples will be written using ES6 classes. Besides it's more convinient. If you don't want to use ES6 go [here](#here).
+This project uses ES6 via babel and webpack and it's reason why all of presented examples will be written using ES6 classes. Besides it's more convinient. If you don't want to use ES6 go [here](#xion-without-es6-classes).
 
 Todo.js 
 
@@ -331,22 +331,30 @@ If you want to use Xion without any transpilers you can load Xion directly and w
 <script src="../build/xion.min.js"></script>
 
 <script>
-var Component = function(node,opts,mixins){
-    Xion.call(this,node,opts,mixins)
-};
-Component.prototype = Object.create(Xion.prototype);
-
-Component.prototype.view = function() {
-    return ['div',{class:'xion_component',id:'root'},'Component built without es6 classes.'];
-}
-
-var component = new Component(document.body);
-component.render(); 
+    var Component = function(node,opts,mixins){
+        Xion.call(this,node,opts,mixins)
+    };
+    Component.prototype = Object.create(Xion.prototype);
+    
+    Component.prototype.view = function() {
+        return ['div',{class:'xion_component',id:'root'},'Component built without es6 classes.'];
+    }
+    
+    var component = new Component(document.body);
+    component.render(); 
 </script>
-
 ```
+You can find more examples into [tests](https://github.com/kysonic/xion/tree/master/tests). 
 
+##Bundles 
 
+Build folder of this project contains a few bundles:
+
+| Bundle name            | Description                |
+|------------------------|----------------------------|
+| xion.min.js            | Contains Xion class only.  |
+| xion.min.es6.js        | Contains Xion class and required ES6 polyffils.|
+| xion.min.ui.js         | Contains Xion class and required ES6 polyffils and UI set. (in progress)|
 
 
 
