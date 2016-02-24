@@ -70,14 +70,21 @@ Check this [example](https://github.com/kysonic/xion/tree/master/src/example/Tod
 
 Following text will consist of descriptions of basic ideas which largely was stolen from React, Riot, Polymer, etc. 
 
-### Instantiation
+### Instantiation.
 
 ```
 import UI from 'xion.ui.js'; 
 
 var popup = new UI.Popup(document.body,{title:'My Popup!'},[Mixin]);
 ```
-First paramater is *DOM node* component will be rendered in. Second is **options** transmited to component instance as defaults. Third is **Array of mixins** using in the component **instance**.
+First paramater is **DOM node** component will be rendered in. Second is **options** transmited to component instance as defaults. Third is **Array of mixins** using in the * component instance*.
+
+By default the component won't render. You should invoke render() method manually. 
+
+```
+popup.render(); 
+```
+It was made because of one of basic Xion concepts - full control. There is no any unexpected, uncontrolled updating. You and only you will decide when your component should update its view. 
 
 ### Structure. 
 
@@ -88,7 +95,7 @@ import Xion from 'xion';
 
 class Component extends Xion {
     view() {
-        return ['div',{'xion_component'},'Component Here!'];
+        return ['div',{class:'xion_component'},'Component Here!'];
     }
 }
 
@@ -134,6 +141,60 @@ component.render();
 ```
 
 ### DOM links 
+
+Xion has simple mechanism helping you retrieve DOM nodes from your component. For this you should to set id attribute to some node into your JsonML markup and get it through calling this.$['nodeID'].
+
+Component.js 
+
+```
+import Xion from 'xion';
+
+class Component extends Xion {
+    view() {
+        return ['div',{class:'xion_component',id:'root'},
+            ['h1',{class:'xion_component-title',id:'title'},'Component here!']
+        ];
+    }
+}
+
+export default Component;
+```
+
+main.js 
+
+```
+import Component from './components/Component.js';
+
+var component = new Component(document.body);
+console.log(component.$); // {} - There are no links yet
+component.render(); 
+console.log(component.$); // {root: <div .../>,title: <h1 .../>}
+```
+
+### Events
+
+Xion doesn't have any special syntax to define event listeners. In this case you can use simple HTML attributes like: onclick,oninput,onchange, etc. 
+
+```
+import Xion from 'xion';
+
+class Component extends Xion {
+    view() {
+        return ['div',{class:'xion_component',id:'root'},
+            ['button',{class:'xion_component-button',id:'button',onclick:this.click},'Click me']
+        ];
+    }
+    click() {
+        console.log('Button was clicked.');
+    }
+}
+
+export default Component;
+```
+
+
+
+
 
 
 
