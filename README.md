@@ -77,7 +77,7 @@ import UI from 'xion.ui.js';
 
 var popup = new UI.Popup(document.body,{title:'My Popup!'},[Mixin]);
 ```
-First paramater is **DOM node** component will be rendered in. Second is **options** transmited to component instance as defaults. Third is **Array of [mixins](#mixins)** using in the *component instance*.
+First paramater is **DOM node** component will be rendered in. Second is **options** transmited to component instance as defaults. Third is **Array of [mixins](#mixins-and-components-inheritance)** using in the *component instance*.
 
 By default the component won't render. You should invoke render() method manually. 
 
