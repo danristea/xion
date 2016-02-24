@@ -362,7 +362,7 @@ To leran more about Xion you can check [this](https://github.com/kysonic/xion/tr
 
 ## Bugs, enhancements, suggestions
 
-If you want to help make this project better you can add your suggestions [here](https://github.com/kysonic/riot-mui/xion). This also applies to bugs and enhancements. 
+If you want to help make this project better you can add your suggestions [here](https://github.com/kysonic/xion/issues). This also applies to bugs and enhancements. 
 
 ## Contributing 
 
