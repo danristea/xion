@@ -1,45 +1,34 @@
+import styles from './Todo.css';
 import Xion from '../../xion/Xion.js';
 
 class Todo extends Xion {
-    controller() {
-        this.state = {
-            items: []
-        }
-        this.useAdd2=false;
+    controller(opts) {
+        this.items = opts.items||[];
     }
     view() {
         return ['div',{class:'xe_todo'},
             ['ul',{class:'xe_todo-items'},this.drawItems()],
-            ['input',{class:'xe_todo-input',type:'text',placeholder:'Enter item title',id:'xetInput'}],
-            ['button',{class:'xe_todo-button',onclick:this.useAdd2?this.add2:this.add},'ADD #'+(parseInt(this.state.items.length)+1)],
-            ['button',{class:'xe_todo-button',onclick:this.showState},'ShowState']
+            ['input',{class:'xe_todo-input',type:'text',placeholder:'Enter item title',id:'input'}],
+            ['button',{class:'xe_todo-button',onclick:this.add},'ADD #'+(parseInt(this.items.length)+1)]
         ]
     }
     drawItems() {
-        return this.state.items.map((item)=>{
-            return ['li',{class:'xe_todo-item'},item.title];
+        return this.items.map((item,i)=>{
+            return ['li',{class:'xe_todo-item'},
+                ['span',{class:'xe_todo-item-title'},item.title],
+                ['div',{class:'xe_todo-item-remove',onclick:this.remove.bind(this,i)}]
+            ];
         });
     }
     add() {
-        console.log('Add1');
-        this.state.items.push({title:this.$.xetInput.value});
+        if(!this.$.input.value) return;
+        this.items.push({title:this.$.input.value});
         this.render();
-        this.$.xetInput.value = '';
+        this.$.input.value = '';
     }
-    add2() {
-        console.log('Add2');
-        this.state.items.push({title:this.$.xetInput.value});
+    remove(i) {
+        this.items.splice(i,1);
         this.render();
-        this.$.xetInput.value = '';
-    }
-    shouldRender(previousState) {
-        if(!previousState) return true;
-        // Compare
-        return previousState.items.length!=this.state.items.length;
-    }
-    showState() {
-       console.log( this.state );
-        this.useAdd2 = true;
     }
 }
 

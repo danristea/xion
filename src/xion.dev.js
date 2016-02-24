@@ -12,6 +12,6 @@ window.ui.popup = new UI.Popup(document.body,
 );
 window.ui.popup.render();
 
-window.ui.todo = new Todo(document.body);
+window.ui.todo = new Todo(document.body,{items:[{title:'First task'}]});
 window.ui.todo.render();
 

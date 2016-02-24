@@ -2,7 +2,7 @@
   "name": "xion",
   "version": "0.0.1",
   "description": "Simple, tiny MVC framework.",
-  "main": "index.js",
+  "main": "./src/xion/Xion.js",
   "keywords": "js,framework,mvc",
   "scripts": {
     "test": "mocha-phantomjs tests/xion.tests.html"
