@@ -353,8 +353,22 @@ Build folder of this project contains a few bundles:
 | Bundle name            | Description                |
 |------------------------|----------------------------|
 | xion.min.js            | Contains Xion class only.  |
-| xion.min.es6.js        | Contains Xion class and required ES6 polyffils.|
-| xion.min.ui.js         | Contains Xion class and required ES6 polyffils and UI set. (in progress)|
+| xion.min.es6.js        | Contains Xion class and required ES6 polyfills.|
+| xion.min.ui.js         | Contains Xion class and required ES6 polyfills and UI set. (in progress)|
+
+##Examples 
+
+To leran more about Xion you can check [this](https://github.com/kysonic/xion/tree/master/src/example) examples. 
+
+## Bugs, enhancements, suggestions
+
+If you want to help make this project better you can add your suggestions [here](https://github.com/kysonic/riot-mui/xion). This also applies to bugs and enhancements. 
+
+## Contributing 
+
+1. Fork the repo. 
+2. Write your code. 
+3. Submit your pull request to dev branch of this project. 
 
 
 
