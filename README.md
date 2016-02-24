@@ -142,7 +142,7 @@ component.render();
 
 ### DOM links. 
 
-Xion has simple mechanism helping you retrieve DOM nodes from your component. For this you should to set id attribute to some node into your JsonML markup and get it through calling *this.$['nodeID']*.
+Xion has simple mechanism helping you to retrieve DOM nodes from your component. For this you should to set id attribute to some node into your JsonML markup and get it through calling *this.$['nodeID']*.
 
 Component.js 
 
