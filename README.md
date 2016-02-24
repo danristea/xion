@@ -1,6 +1,6 @@
 # Xion
 
-Xion is a lightweight client-side library (in fact it's class) for building component like user interfaces. The main purpose of Xion is creating UI components fast without any difficult agreements regarding library methods, naming, hard syntax, etc. All what you have to know that you will be able to use Xion is JavaScript and JsonML only. Xion can be used like a constituent part of your custom library which have to be able to create some interfaces. 
+Xion is a lightweight client-side library (in fact it's class) for building component like user interfaces. The main purpose of Xion is creating UI components fast without any difficult agreements regarding library methods, naming, hard syntax, etc. All what you have to know that you will be able to use Xion are JavaScript and [JsonML](http://www.jsonml.org/) only. Xion can be used like a constituent part of your custom library which has to be able to create some interfaces. 
 
 ##Download Xion.
 
@@ -56,7 +56,7 @@ export default Todo;
 main.js 
 
 ```
-import Todo from '../component/Todo.js';
+import Todo from '../components/Todo.js';
 
 var todo = new Todo(document.body,{items:[{title:'First task'}]});
 todo.render(); 
@@ -67,6 +67,35 @@ Check this [example](https://github.com/kysonic/xion/tree/master/src/example/Tod
 
 ##Basic concepts.
 
+Following text will consist of descriptions of basic ideas which largely was stolen from React, Riot, Polymer, etc. 
 
+### Structure. 
+
+Any Xion component should be a class. There is only one required method which must be included into the class - view(). Otherwise your component will render a great emptiness. The view method has to return [JsonML](http://www.jsonml.org/). 
+
+```
+import Xion from 'xion';
+
+class Component extends Xion {
+    view() {
+        return ['div',{'xion_component'},'Component Here!'];
+    }
+}
+export default Component;
+```
+
+JsonML is markup language allowing you to build HTML. You can learn it using links above, but briefly it can be desribed like that: 
+
+```
+['tag-name',{attr:attrValue,...},[children]|textContent]
+```
+
+Xion extends the concept a little bit to provide nested components: 
+
+```
+['tag-name',{attr:attrValue,...},[children]|textContent|xionComponent]
+```
+
+That means you can build nested component structure for your interfaces, we will speak about child compponents [below](#children).
 
 
