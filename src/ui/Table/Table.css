@@ -1,0 +1,19 @@
+/** TABLE **/
+.xion_table {
+    width: 100%;
+}
+.xion_table th {
+    text-align: left;
+    padding: 5px 0;
+}
+.xion_table td {
+    padding: 0 5px 0 0;
+}
+.xion_table .xion_table-select {
+    text-decoration: underline;
+    cursor: pointer;
+}
+.xion_table-link {
+    text-decoration: underline;
+    cursor: pointer;
+}

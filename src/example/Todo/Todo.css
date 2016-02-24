@@ -1,0 +1,40 @@
+.xe_todo {
+    padding: 10px;
+    font-size: 16px;
+}
+.xe_todo .xe_todo-items {
+    list-style: square;
+}
+.xe_todo .xe_todo-input {
+    height: 30px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    padding: 0 5px;
+}
+.xe_todo .xe_todo-button {
+    height: 32px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    padding: 0 5px;
+    background: #f3f3f3;
+    cursor: pointer;
+}
+.xe_todo .xe_todo-button:hover {
+    background: #cecece;
+}
+.xe_todo .xe_todo-item-title {
+    height: 20px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.xe_todo .xe_todo-item-remove {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background: url(https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_close_48px-128.png) no-repeat;
+    background-size: cover;
+    cursor: pointer;
+    vertical-align: middle;
+    position: relative;
+    bottom: 1px;
+}
