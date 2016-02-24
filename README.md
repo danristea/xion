@@ -70,6 +70,15 @@ Check this [example](https://github.com/kysonic/xion/tree/master/src/example/Tod
 
 Following text will consist of descriptions of basic ideas which largely was stolen from React, Riot, Polymer, etc. 
 
+### Instantiation
+
+```
+import UI from 'xion.ui.js'; 
+
+var popup = new UI.Popup(document.body,{title:'My Popup!'},[Mixin]);
+```
+First paramater is *DOM node* component will be rendered in. Second is **options** transmited to component instance as defaults. Third is **Array of mixins** using in the component **instance**.
+
 ### Structure. 
 
 Any Xion component should be a **class**. There is only one required method which must be included into the class - **view()**. Otherwise your component will render great emptiness. The view method has to return [JsonML](http://www.jsonml.org/). 
@@ -100,7 +109,7 @@ Xion extends the concept a little bit to provide nested components:
 
 That means you can build nested component structure for your interfaces, we will speak about child compponents [below](#children).
 
-Any Xion component can contain **contoller()** method. In fact the controller is mixin transmiting options and mixins bypassing constructor. It was made because otherwise you would have to transmit all required parameters in component constructor that could be less convinient than described approach. Also controller needed to transmit options into component. 
+Any Xion component can contain **contoller()** method. In fact the controller is mixin transmiting options and mixins bypassing constructor. It was made because otherwise you would have to transmit all required parameters in component constructor that could be less convinient than described approach.
 
 Component.js: 
 
@@ -121,7 +130,12 @@ main.js
 ```
 import Component from './components/Component.js';
 var component = new Component(document.body,{items:[...]}); // items here
+component.render(); 
 ```
+
+### DOM links 
+
+
 
 
 
