@@ -77,7 +77,7 @@ import UI from 'xion.ui.js';
 
 var popup = new UI.Popup(document.body,{title:'My Popup!'},[Mixin]);
 ```
-First paramater is **DOM node** component will be rendered in. Second is **options** transmited to component instance as defaults. Third is **Array of mixins** using in the *component instance*.
+First paramater is **DOM node** component will be rendered in. Second is **options** transmited to component instance as defaults. Third is **Array of [mixins](#mixins)** using in the *component instance*.
 
 By default the component won't render. You should invoke render() method manually. 
 
@@ -114,7 +114,7 @@ Xion extends the concept a little bit to provide nested components:
 ['tag-name',{attr:attrValue,...},[children]|textContent|xionComponent]
 ```
 
-That means you can build nested component structure for your interfaces, we will speak about child compponents [below](#children).
+That means you can build nested component structure for your interfaces, we will speak about child compponents [below](#child-components).
 
 Any Xion component can contain **contoller()** method. In fact the controller is mixin transmiting options and mixins bypassing constructor. It was made because otherwise you would have to transmit all required parameters in component constructor that could be less convinient than described approach.
 
