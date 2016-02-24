@@ -358,7 +358,7 @@ Build folder of this project contains a few bundles:
 
 ##Examples. 
 
-To leran more about Xion you can check [this](https://github.com/kysonic/xion/tree/master/src/example) examples. 
+To leran more about Xion you can check [component](https://github.com/kysonic/xion/tree/master/src/example) and [ui](https://github.com/kysonic/xion/tree/master/src/ui) examples.
 
 ##Tests.
 
