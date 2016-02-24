@@ -362,8 +362,6 @@ To leran more about Xion you can check [component](https://github.com/kysonic/xi
 
 ##Tests.
 
-Run tests:  
-
 ```
 npm test
 ```
