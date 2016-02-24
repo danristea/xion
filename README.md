@@ -321,7 +321,32 @@ export default MyPopup;
 
 To prevent permanent full DOM reconstructing Xion uses caching. All of Xion components have *this.cache* property which consists current DOM states. For instance, this.cache.node - root node, this.cache.attrs - its attributes, this.cache.children - its children. When render() method will be called, component cache system will check differences between new view markup and current rendered DOM and resolve it properly. 
 
-Anyway Xion wasn't made like system for building big data interfaces. There are no any collection manipulation methods like for instance, this.push('items',{...}) in Polymer. 
+Anyway Xion wasn't made like system for building big data interfaces. There are no any collection manipulation methods like this.push('items',{...}) in Polymer. 
+
+## Xion without ES6 classes. 
+
+If you want to use Xion without any transpilers you can load Xion directly and write: 
+
+```
+<script src="../build/xion.min.js"></script>
+
+<script>
+var Component = function(node,opts,mixins){
+    Xion.call(this,node,opts,mixins)
+};
+Component.prototype = Object.create(Xion.prototype);
+
+Component.prototype.view = function() {
+    return ['div',{class:'xion_component',id:'root'},'Component built without es6 classes.'];
+}
+
+var component = new Component(document.body);
+component.render(); 
+</script>
+
+```
+
+
 
 
 
