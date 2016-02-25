@@ -114,9 +114,9 @@ Xion extends the concept a little bit to provide nested components:
 ['tag-name',{attr:attrValue,...},[children]|textContent|xionComponent]
 ```
 
-That means you can build nested component structure for your interfaces, we will speak about child compponents [below](#child-components).
+That means you can build nested component structure for your interfaces. We will speak about child compponents [below](#child-components).
 
-Any Xion component can contain **contoller()** method. In fact the controller is mixin transmiting options and mixins bypassing constructor. It was made because otherwise you would have to transmit all required parameters in component constructor that could be less convinient than described approach.
+Any Xion component can contain **contoller()** method. In fact the controller is a mixin transmiting options and mixins bypassing constructor. It was made because otherwise you would have to transmit all required parameters in component constructor that could be less convinient than described approach.
 
 Component.js: 
 
