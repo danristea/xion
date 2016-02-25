@@ -6,7 +6,7 @@ Xion is a lightweight (4.6kb) client-side library (in fact it's class) for build
 
 ```
 npm install xion
-git clone https://github.com/kysonic/xion
+git clone https://github.com/danristea/xion
 ```
 
 ##Quick example.
@@ -64,11 +64,11 @@ todo.render();
 
 ```
 
-Check this [example](https://github.com/kysonic/xion/tree/master/src/example/Todo). 
+Check this [example](https://github.com/danristea/xion/tree/master/src/example/Todo). 
 
 ##Basic concepts.
 
-Following text consists of descriptions of basic ideas which largely was stolen from React, Riot, Polymer, etc. 
+Following text consists of descriptions of basic ideas which largely were stolen from React, Riot, Polymer, etc. 
 
 ### Instantiation.
 
@@ -344,7 +344,7 @@ If you want to use Xion without any transpilers you can load Xion directly and w
     component.render(); 
 </script>
 ```
-You can find more examples into [tests](https://github.com/kysonic/xion/tree/master/tests). 
+You can find more examples into [tests](https://github.com/danristea/xion/tree/master/tests). 
 
 ##Bundles. 
 
@@ -358,7 +358,7 @@ Build folder of this project contains a few bundles:
 
 ##Examples. 
 
-To leran more about Xion you can check [component](https://github.com/kysonic/xion/tree/master/src/example) and [ui](https://github.com/kysonic/xion/tree/master/src/ui) examples.
+To leran more about Xion you can check [component](https://github.com/danristea/xion/tree/master/src/example) and [ui](https://github.com/danristea/xion/tree/master/src/ui) examples.
 
 ##Tests.
 
@@ -368,7 +368,7 @@ npm test
 
 ## Bugs, enhancements, suggestions.
 
-If you want to help make this project better you can add your suggestions [here](https://github.com/kysonic/xion/issues). This also applies to bugs and enhancements. 
+If you want to help make this project better you can add your suggestions [here](https://github.com/danristea/xion/issues). This also applies to bugs and enhancements. 
 
 ## Contributing.
 
