@@ -109,20 +109,20 @@ let JsonMLDriver = {
         diffData = data.slice(0);
         // Go through cache children
         cache.children.forEach((child, index)=>{
-            let found, position;
-            // Data difference
-            for (let i = 0, l = diffData.length; i < l; i++) {
-                if ((typeof diffData[i] === 'string' && child.node.nodeValue && child.node.nodeValue == diffData[i]) ||
+            var found;
+            for (var i = 0, l = diffData.length; i < l; i++) {
+                if (found) {
+                    if (children[i] && children[i].node && cache.children.indexOf(children[i]) < cache.children.indexOf(child)) {
+                        child.node.parentNode.insertBefore(child.node, children[i].node)
+                        break;
+                    }
+                } else if ((typeof diffData[i] === 'string' && child.node.nodeValue && child.node.nodeValue == diffData[i]) ||
                     Array.isArray(diffData[i]) && child.node.tagName && child.node.tagName.toLowerCase() == diffData[i][0]) {
+                    children[i] = diffData[i] = child;
                     found = true;
-                    position = data.indexOf(diffData[i]);
-                    diffData.splice(i, 1);
-                    break;
                 }
             }
-            // If child was found - update it, else - remove
-            if (found) children[position] = child;
-            else if(child.node) child.node.parentNode.removeChild(child.node);
+            if (!found) child.node.parentNode.removeChild(child.node);
         });
         // Save changed child
         cache.children = children;
